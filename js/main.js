@@ -1,28 +1,63 @@
-const products = [
-    {id: 1, title: 'TAYLOR BBT Big Baby Taylor', price: 38000, href: "catalog/taylor.html", img: "images/taylor.jpg", alt: "Taylor"},
-    {id: 2, title: 'IBANEZ ArtWood AVD9-NT', price: 47500, href: "catalog/ibanez.html", img: "images/ibanez.jpg", alt: "Ibanez"},
-    {id: 3, title: 'Fender Squier Vintage Modified Precision Bass PJ 3-Color Sunburst', price: 170000, href: "catalog/fender.html", img: "images/fender.jpg", alt: "Fender"},
-    {id: 4, title: 'SCHECTER OMEN EXTREME-5 VSB', price: 62000, href: "catalog/schecter.html", img: "images/schecter.jpg", alt: "Schecter"},
-    {id: 5, title: 'FENDER American Special Stratocaster HSS, Rosewood Fingerboard', price: 190000, href: "catalog/fender_special.html", img: "images/fender_special.jpg", alt: "Fender special"},
-    {id: 6, title: 'GIBSON LES PAUL FADED 2018 WORN CHERRY', price: 12000, href: "catalog/gibson.html", img: "images/gibson.jpg", alt: "Gibson"},
-];
-const defaultProduct = {id: 0, title: 'Гитара', price: 100, href: '#', img: 'images/blank_guitar.jpg', alt: 'guitar'};
-//Функция для формирования верстки каждого товара
-const renderProduct = (prod = defaultProduct) => {
-    return `<div class="cat_product">
-                <a href="${prod.href}">
-                    <img class="cat_img" src="${prod.img}" alt="${prod.alt}">
-                    <h3>${prod.title}</h3>
-                    <button class="buy-btn">Купить (${prod.price} р.)</button>
-                </a>
-            </div>`
-};
-const renderPage = (list = []) => {
-    const productsList = list.map(item => renderProduct(item));
-    console.log(productsList);
-    // Запятые в оригинальном скрипте появлялись из-за применения стандартного сепаратора (запятая) при получении строкового представления
-    // массива productList. С помощью метода join можно задать другой сепаратор (в данном случае это пустая строка).
-    document.querySelector('.cat').innerHTML = productsList.join('');
-};
+class ProductsList{
+    constructor(container = '.cat'){
+        this.container = container;
+        this.goods = [];
+        this._fetchProducts();
+    } 
+    
+    _fetchProducts(){
+        this.goods = [
+            {id: 1, title: 'TAYLOR BBT Big Baby Taylor', price: 38000, href: "catalog/taylor.html", img: "images/taylor.jpg"},
+            {id: 2, title: 'IBANEZ ArtWood AVD9-NT', price: 47500, href: "catalog/ibanez.html", img: "images/ibanez.jpg"},
+            {id: 3, title: 'Fender Squier Vintage Modified Precision Bass PJ 3-Color Sunburst', price: 170000, href: "catalog/fender.html", img: "images/fender.jpg"},
+            {id: 4, title: 'SCHECTER OMEN EXTREME-5 VSB', price: 62000, href: "catalog/schecter.html"}, // здесь отсутствует изображение
+            {id: 5, title: 'FENDER American Special Stratocaster HSS, Rosewood Fingerboard', price: 190000, href: "catalog/fender_special.html", img: "images/fender_special.jpg"},
+            {id: 6, title: 'GIBSON LES PAUL FADED 2018 WORN CHERRY', price: 12000, href: "catalog/gibson.html", img: "images/gibson.jpg"},
+        ];
+    }
 
-renderPage(products);
+    render(){
+        const block = document.querySelector(this.container);
+        for(let product of this.goods){
+            const productObj = new ProductItem(product);
+            block.insertAdjacentHTML('beforeend',productObj.render())
+        }
+    }
+    
+    // метод возвращает суммарную стоимость всех товаров
+    totalPrice(){
+        let sum = 0;
+        this.goods.forEach(item => sum += item.price);
+        return sum;
+    }
+}
+
+
+class ProductItem{
+	constructor(product){
+		this.title = product.title;
+		this.price = product.price;
+		this.id = product.id;
+        this.href = product.href;
+        if (product.img){
+            this.img = product.img;
+        }
+        else{ // product не имеет свойства img, подставляем картинку по умолчанию
+            this.img = "images/blank_guitar.jpg";
+        }
+	}
+	
+	render(){
+        return `<div class="cat_product" data-id="${this.id}>
+                    <a href="${this.href}">
+                        <img class="cat_img" src="${this.img}" alt="${this.alt}">
+                        <h3>${this.title}</h3>
+                        <button class="buy-btn">Купить (${this.price} р.)</button>
+                    </a>
+                </div>`
+	}
+}
+
+let list = new ProductsList();
+list.render();
+console.log(`totalPrice: ${list.totalPrice()}`);
