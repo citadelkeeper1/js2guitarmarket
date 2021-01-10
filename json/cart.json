@@ -1,0 +1,19 @@
+{
+  "amount": 138000,
+  "countGoods": 3,
+  "contents": [
+    {
+        "id_product": "1",
+        "product_name": "TAYLOR BBT Big Baby Taylor",
+        "price": 38000,
+        "quantity": 2
+    },
+    {
+        "id_product": "4",
+        "product_name": "SCHECTER OMEN EXTREME-5 VSB",
+        "price": 62000,
+        "quantity": 1
+    }
+  ]
+}
+

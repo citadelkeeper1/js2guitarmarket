@@ -1,0 +1,43 @@
+[
+    {
+        "id": "1",
+        "title": "TAYLOR BBT Big Baby Taylor",
+        "price": 38000,
+        "href": "catalog/taylor.html",
+        "img": "images/taylor.jpg"
+    },
+    {
+        "id": "2",
+        "title": "IBANEZ ArtWood AVD9-NT",
+        "price": 47500,
+        "href": "catalog/ibanez.html",
+        "img": "images/ibanez.jpg"
+    },
+    {
+        "id": "3",
+        "title": "Fender Squier Vintage Modified Precision Bass PJ 3-Color Sunburst",
+        "price": 170000,
+        "href": "catalog/fender.html",
+        "img": "images/fender.jpg"
+    },
+    {
+        "id": "4",
+        "title": "SCHECTER OMEN EXTREME-5 VSB",
+        "price": 62000,
+        "href": "catalog/schecter.html"
+    },
+    {
+        "id": "5",
+        "title": "FENDER American Special Stratocaster HSS, Rosewood Fingerboard",
+        "price": 190000,
+        "href": "catalog/fender_special.html",
+        "img": "images/fender_special.jpg"
+    },
+    {
+        "id": "6",
+        "title": "GIBSON LES PAUL FADED 2018 WORN CHERRY",
+        "price": 12000,
+        "href": "catalog/gibson.html",
+        "img": "images/gibson.jpg"
+    }
+]
