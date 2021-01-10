@@ -244,3 +244,36 @@ table {
     border: 1px solid #acacac;
 }
 
+
+.cart_pic {
+    text-align: center;
+}
+
+.cart:after {
+    display: block;
+    clear: both;
+    content: '';
+}
+
+.cart_product {
+    width: 90%;
+    float: left;
+    margin-left: 5%;
+    text-align: left;
+}
+
+.cart_product:nth-child(n+4) {
+    margin-top: 35px;
+}
+
+.cart_product:nth-child(3n) {
+    margin-right: 0;
+}
+
+.cart_img {
+    height: 200px;
+    border: 1px solid #acacac;
+    float:left;
+    margin: 7px 7px 7px 0;
+}
+

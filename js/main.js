@@ -1,19 +1,39 @@
+/*eslint-env es6*/
+/*eslint-env browser*/
+/*eslint-disable no-unused-vars*/
+/*eslint-disable no-console*/
+
+PRODUCTS_JSON_PATH = 'JSON/products.json'  // путь к json-файлу с товарами
+
 class ProductsList{
     constructor(container = '.cat'){
         this.container = container;
+        this.cartPriceElement = document.getElementById('cartMenuButton');  // пункт меню "корзина"
         this.goods = [];
-        this._fetchProducts();
-    } 
+        this._cartPrice = 138000;  // общая стоимость корзины
+        this._getProducts()  // получаем список товаров
+            .then(data => {
+                this.goods = [...data];
+                this.render();
+                this._buyButtons = [];  // массив элементов кнопок "купить"
+                for(let i=1; i<=this.goods.length; i++){
+                    this._buyButtons[i-1] = document.getElementById(i);  // находим элемент кнопки
+                    this._buyButtons[i-1].addEventListener('click', (item) => {  // добавляем обработчик события 'click'
+                        this._cartPrice += this.goods[i-1].price;  // увеличиваем стоимость корзины
+                        this.showTotalCartPrice();  // меняем соответствующий пункт меню
+                    });
+                }
+            });
+    }
     
-    _fetchProducts(){
-        this.goods = [
-            {id: 1, title: 'TAYLOR BBT Big Baby Taylor', price: 38000, href: "catalog/taylor.html", img: "images/taylor.jpg"},
-            {id: 2, title: 'IBANEZ ArtWood AVD9-NT', price: 47500, href: "catalog/ibanez.html", img: "images/ibanez.jpg"},
-            {id: 3, title: 'Fender Squier Vintage Modified Precision Bass PJ 3-Color Sunburst', price: 170000, href: "catalog/fender.html", img: "images/fender.jpg"},
-            {id: 4, title: 'SCHECTER OMEN EXTREME-5 VSB', price: 62000, href: "catalog/schecter.html"}, // здесь отсутствует изображение
-            {id: 5, title: 'FENDER American Special Stratocaster HSS, Rosewood Fingerboard', price: 190000, href: "catalog/fender_special.html", img: "images/fender_special.jpg"},
-            {id: 6, title: 'GIBSON LES PAUL FADED 2018 WORN CHERRY', price: 12000, href: "catalog/gibson.html", img: "images/gibson.jpg"},
-        ];
+    _getProducts(){  // получение списка товаров из JSON
+        return fetch(PRODUCTS_JSON_PATH)
+            .then(result => result.json())
+            .catch(err => console.log(err));
+    }
+    
+    showTotalCartPrice(){  // выводим общую стоимость корзины в меню
+        this.cartPriceElement.innerHTML = `Корзина (${this._cartPrice} руб.)`;
     }
 
     render(){
@@ -22,12 +42,14 @@ class ProductsList{
             const productObj = new ProductItem(product);
             block.insertAdjacentHTML('beforeend',productObj.render())
         }
+        this.showTotalCartPrice();
     }
     
     // метод возвращает суммарную стоимость всех товаров
     totalPrice(){
-        let sum = 0;
-        this.goods.forEach(item => sum += item.price);
+//        let sum = 0;
+//        this.goods.forEach(item => sum += item.price);
+        let sum = this.goods.reduce((accum, item) => accum += item.price, 0)
         return sum;
     }
 }
@@ -48,16 +70,19 @@ class ProductItem{
 	}
 	
 	render(){
-        return `<div class="cat_product" data-id="${this.id}>
+        return `<div class="cat_product">
                     <a href="${this.href}">
                         <img class="cat_img" src="${this.img}" alt="${this.alt}">
                         <h3>${this.title}</h3>
-                        <button class="buy-btn">Купить (${this.price} р.)</button>
                     </a>
+                    <button class="buy-btn" id="${this.id}">Купить (${this.price} р.)</button>
                 </div>`
 	}
 }
 
 let list = new ProductsList();
 list.render();
+
+
 console.log(`totalPrice: ${list.totalPrice()}`);
+
